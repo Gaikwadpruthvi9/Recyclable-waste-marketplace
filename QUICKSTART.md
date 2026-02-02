@@ -7,10 +7,17 @@ Since PowerShell execution is restricted, follow these steps:
 ### Method 1: Using Command Prompt (EASIEST)
 
 1. **Open Command Prompt** (not PowerShell)
-   cd C:\Users\gaikw\.gemini\antigravity\scratch\waste-trading-platform
+   ```cmd
+   cd /d f:\Scrapify\client
    ```
 
-3. **Start the server**
+2. **Start the server**
+   ```cmd
+   npm run dev
+   ```
+
+3. **Wait for the server to start**
+   - You'll see: `✓ Ready in X.Xs`
    
    ```
 
@@ -20,7 +27,7 @@ Since PowerShell execution is restricted, follow these steps:
 ### Method 2: Using File Explorer
 
 1. Open File Explorer
-2. Navigate to: `C:\Users\gaikw\.gemini\antigravity\scratch\waste-trading-platform`
+2. Navigate to: `f:\Scrapify\client`
 3. Type `cmd` in the address bar and press Enter
 4. In the Command Prompt that opens, type:
    ```cmd

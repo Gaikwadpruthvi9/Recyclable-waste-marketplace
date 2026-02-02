@@ -212,6 +212,28 @@ CLIENT_URL=http://localhost:3000
 - **Location-based:** Interactive maps for waste location
 - **Photo Verification:** Upload and verify waste photos
 
+## 📸 Screenshots
+
+### Home Page
+![Home Page](screenshots/home-page.jpg)
+*Landing page showcasing the platform's value proposition and key features*
+
+### Browse Waste Listings
+![Browse Listings](screenshots/browse-listings.jpg)
+*Search and filter recyclable waste listings by category, location, and quantity*
+
+### Services
+![Services Page](screenshots/services-page.jpg)
+*Comprehensive waste management solutions including logistics, audits, and compliance*
+
+### Logistics Service
+![Logistics Service](screenshots/logistics-service.jpg)
+*Request pickup scheduling, transportation, and tracking services*
+
+### Market Insights
+![Market Insights](screenshots/market-insights.jpg)
+*Real-time market price trends and analytics for informed trading decisions*
+
 ## 🔐 Authentication
 
 Currently using localStorage-based authentication (development mode).

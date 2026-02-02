@@ -19,6 +19,7 @@ export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
     const { user, logout } = useAuth();
     const { t, language, setLanguage } = useTranslation();
@@ -29,6 +30,11 @@ export default function Header() {
 
     const dropdownRef = useRef<HTMLDivElement>(null);
     const langDropdownRef = useRef<HTMLDivElement>(null);
+
+    // Prevent hydration mismatch by only rendering user-dependent content after mount
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Close dropdowns when clicking outside
     useEffect(() => {
@@ -90,7 +96,7 @@ export default function Header() {
                             {t.header.services}
                         </Link>
 
-                        {user && (
+                        {mounted && user && (
                             <>
                                 <Link href="/offers" className="text-gray-600 hover:text-primary-600 font-medium transition-colors relative">
                                     Offers
@@ -111,7 +117,7 @@ export default function Header() {
                             </>
                         )}
 
-                        {user && (user.role === 'seller' || user.role === 'admin') && (
+                        {mounted && user && (user.role === 'seller' || user.role === 'admin') && (
                             <Link
                                 href={user.role === 'admin' ? "/dashboard/admin" : "/dashboard/seller"}
                                 className="text-gray-600 hover:text-primary-600 font-medium transition-colors"
@@ -151,7 +157,7 @@ export default function Header() {
                             )}
                         </div>
 
-                        {user ? (
+                        {mounted && user ? (
                             <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
@@ -287,7 +293,7 @@ export default function Header() {
                             {t.header.services}
                         </Link>
 
-                        {user && (
+                        {mounted && user && (
                             <>
                                 <Link
                                     href="/offers"
@@ -332,7 +338,7 @@ export default function Header() {
                             </div>
                         </div>
 
-                        {user ? (
+                        {mounted && user ? (
                             <>
                                 <div className="border-t border-gray-100 pt-4 mt-2">
                                     <div className="flex items-center gap-3 mb-4">

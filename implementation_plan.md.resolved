@@ -1,0 +1,224 @@
+# Scrapify Project Restructuring - Implementation Plan
+
+## Goal
+Reorganize the Scrapify project from a single Next.js application into a well-structured full-stack monorepo with clear separation between frontend and backend code, following industry best practices.
+
+## Current Structure Analysis
+
+The project currently uses Next.js with all code in a single `src/` directory:
+- `src/app/` - Next.js App Router pages
+- `src/components/` - React components
+- `src/hooks/` - React hooks
+- `src/lib/` - Utilities, types, mock data
+
+**Issues with Current Structure:**
+- No clear separation between client and server code
+- Mock data mixed with business logic
+- No dedicated backend API structure
+- Difficult to scale or add real backend services
+
+## Proposed New Structure
+
+```
+scrapify/
+├── client/                    # Frontend Next.js application
+│   ├── src/
+│   │   ├── app/              # Next.js App Router pages
+│   │   ├── components/       # React components
+│   │   ├── hooks/            # React hooks
+│   │   ├── lib/              # Client-side utilities
+│   │   └── styles/           # Global styles
+│   ├── public/               # Static assets
+│   ├── package.json
+│   ├── next.config.js
+│   ├── tsconfig.json
+│   └── tailwind.config.js
+│
+├── server/                    # Backend Node.js/Express API
+│   ├── src/
+│   │   ├── controllers/      # Request handlers
+│   │   ├── routes/           # API routes
+│   │   ├── services/         # Business logic
+│   │   ├── models/           # Data models
+│   │   ├── middleware/       # Express middleware
+│   │   ├── utils/            # Server utilities
+│   │   └── index.ts          # Server entry point
+│   ├── package.json
+│   └── tsconfig.json
+│
+├── shared/                    # Shared code between client and server
+│   ├── types/                # TypeScript interfaces/types
+│   ├── constants/            # Shared constants
+│   └── utils/                # Shared utilities
+│
+├── package.json              # Root package.json for monorepo
+├── README.md
+└── .gitignore
+```
+
+## Proposed Changes
+
+### 1. Root Level Setup
+
+#### [NEW] Root [package.json](file:///C:/Users/gaikw/.gemini/antigravity/scratch/waste-trading-platform/package.json)
+- Configure as monorepo workspace
+- Add scripts to run client, server, or both concurrently
+- Include dev dependencies for the entire project
+
+---
+
+### 2. Client Folder (Frontend)
+
+#### [NEW] `client/` directory structure
+Move existing Next.js application:
+- **FROM** `src/app/` **TO** `client/src/app/`
+- **FROM** `src/components/` **TO** `client/src/components/`
+- **FROM** `src/hooks/` **TO** `client/src/hooks/`
+- **FROM** `src/lib/` (client-specific) **TO** `client/src/lib/`
+- **FROM** `public/` **TO** `client/public/`
+
+#### [MODIFY] `client/package.json`
+- Update dependencies for frontend only
+- Configure scripts for client development
+
+#### [MODIFY] `client/tsconfig.json`
+- Update path aliases to reference shared types
+- Configure module resolution
+
+---
+
+### 3. Server Folder (Backend)
+
+#### [NEW] `server/` directory structure
+Create Express.js backend:
+
+##### `server/src/controllers/`
+- `authController.ts` - Authentication logic
+- `listingsController.ts` - Waste listings CRUD
+- `servicesController.ts` - Services management
+- `usersController.ts` - User management
+
+##### `server/src/routes/`
+- `auth.routes.ts` - `/api/auth/*`
+- `listings.routes.ts` - `/api/listings/*`
+- `services.routes.ts` - `/api/services/*`
+- `users.routes.ts` - `/api/users/*`
+
+##### `server/src/services/`
+- Business logic layer (extracted from current mock data)
+- `listingsService.ts`
+- `authService.ts`
+- `servicesService.ts`
+
+##### `server/src/models/`
+- Data models (currently using localStorage, prepare for DB)
+- `User.model.ts`
+- `Listing.model.ts`
+- `ServiceRequest.model.ts`
+
+##### `server/src/index.ts`
+- Express server setup
+- Middleware configuration
+- Route registration
+- Port configuration (default: 5000)
+
+---
+
+### 4. Shared Folder
+
+#### [NEW] `shared/types/`
+Move type definitions from [src/lib/types.ts](file:///C:/Users/gaikw/.gemini/antigravity/scratch/waste-trading-platform/src/lib/types.ts):
+- `User.ts`
+- `Listing.ts`
+- [Service.ts](file:///C:/Users/gaikw/.gemini/antigravity/scratch/waste-trading-platform/src/lib/services/photoVerificationService.ts)
+- `index.ts` - Re-export all types
+
+#### [NEW] `shared/constants/`
+- `wasteCategories.ts`
+- `serviceCategories.ts`
+- `statusEnums.ts`
+
+---
+
+### 5. Configuration Updates
+
+#### [MODIFY] Root `.gitignore`
+```
+node_modules/
+.next/
+dist/
+build/
+.env
+.env.local
+client/.next/
+server/dist/
+```
+
+#### [NEW] Root [package.json](file:///C:/Users/gaikw/.gemini/antigravity/scratch/waste-trading-platform/package.json) scripts
+```json
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build"
+  }
+}
+```
+
+---
+
+### 6. Migration Strategy
+
+**Phase 1: Create Structure**
+1. Create `client/`, `server/`, `shared/` directories
+2. Set up package.json files
+3. Configure TypeScript for each workspace
+
+**Phase 2: Move Frontend**
+1. Copy existing Next.js app to `client/`
+2. Update import paths
+3. Test frontend builds
+
+**Phase 3: Create Backend**
+1. Set up Express server structure
+2. Create API routes
+3. Migrate mock data to backend services
+
+**Phase 4: Integration**
+1. Update client to call backend APIs
+2. Configure CORS
+3. Test full-stack integration
+
+**Phase 5: Documentation**
+1. Update README with new structure
+2. Document API endpoints
+3. Update development workflow
+
+## Benefits
+
+1. **Clear Separation of Concerns** - Frontend and backend are distinct
+2. **Scalability** - Easy to add microservices or split further
+3. **Team Collaboration** - Frontend and backend teams can work independently
+4. **Deployment Flexibility** - Deploy client and server separately
+5. **Code Reusability** - Shared types prevent duplication
+6. **Professional Structure** - Follows industry standards
+
+## Verification Plan
+
+### Build Tests
+- ✓ Client builds successfully: `cd client && npm run build`
+- ✓ Server builds successfully: `cd server && npm run build`
+- ✓ All imports resolve correctly
+
+### Development Tests
+- ✓ Client dev server runs: `npm run dev:client`
+- ✓ Server dev server runs: `npm run dev:server`
+- ✓ Both run concurrently: `npm run dev`
+
+### Integration Tests
+- ✓ Client can fetch data from server
+- ✓ CORS configured correctly
+- ✓ Authentication flow works end-to-end

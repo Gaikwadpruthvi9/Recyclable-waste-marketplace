@@ -234,6 +234,26 @@ CLIENT_URL=http://localhost:3000
 ![Market Insights](screenshots/market-insights.jpg)
 *Real-time market price trends and analytics for informed trading decisions*
 
+### Seller Dashboard
+![Seller Dashboard](screenshots/seller-dashboard.jpg)
+*Manage your waste listings, track approvals, and view service requests*
+
+### Offers Management
+![Offers](screenshots/offers.jpg)
+*Receive, review, and accept/reject offers from buyers*
+
+### Messaging System
+![Messages](screenshots/messages.jpg)
+*Communicate directly with buyers and sellers about listings*
+
+### Hazardous Waste Handling
+![Hazardous Waste](screenshots/hazardous-waste-handling.jpg)
+*Specialized service for safe disposal of hazardous and dangerous waste*
+
+### Sustainability Report
+![Sustainability Report](screenshots/sustainability-report.jpg)
+*Track environmental impact with detailed sustainability metrics and reports*
+
 ## 🔐 Authentication
 
 Currently using localStorage-based authentication (development mode).

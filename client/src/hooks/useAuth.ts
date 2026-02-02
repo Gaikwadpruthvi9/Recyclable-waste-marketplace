@@ -6,16 +6,17 @@ import { getAuthUser, login as authLogin, logout as authLogout, signup as authSi
 import { useRouter } from 'next/navigation';
 
 export const useAuth = () => {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    // Initialize user state synchronously from localStorage to avoid loading delay
+    const [user, setUser] = useState<User | null>(() => {
+        if (typeof window !== 'undefined') {
+            return getAuthUser();
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState(false); // Changed to false since we load synchronously
     const router = useRouter();
 
-    useEffect(() => {
-        // Check for existing session
-        const currentUser = getAuthUser();
-        setUser(currentUser);
-        setLoading(false);
-    }, []);
+    // No need for useEffect since we load synchronously in useState initializer
 
     const login = async (email: string, password: string) => {
         const result = authLogin(email, password);

@@ -24,7 +24,8 @@ export default function ConversationList({ conversations, selectedId, onSelect }
     return (
         <div className="divide-y divide-gray-200">
             {conversations.map((conversation) => {
-                const lastMessage = conversation.messages[conversation.messages.length - 1];
+                const messages = conversation.messages || [];
+                const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
                 const isSelected = conversation.id === selectedId;
                 const hasUnread = conversation.unreadCount > 0;
 

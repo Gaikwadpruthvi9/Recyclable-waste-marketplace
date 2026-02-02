@@ -1,11 +1,11 @@
 'use client';
 
-import { Conversation } from '@/lib/messaging-types';
+import { ConversationSummary } from '@/lib/messaging-types';
 import { format } from 'date-fns';
 import { MessageCircle, User } from 'lucide-react';
 
 interface ConversationListProps {
-    conversations: Conversation[];
+    conversations: ConversationSummary[];
     selectedId?: string;
     onSelect: (id: string) => void;
 }
@@ -24,8 +24,6 @@ export default function ConversationList({ conversations, selectedId, onSelect }
     return (
         <div className="divide-y divide-gray-200">
             {conversations.map((conversation) => {
-                const messages = conversation.messages || [];
-                const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
                 const isSelected = conversation.id === selectedId;
                 const hasUnread = conversation.unreadCount > 0;
 
@@ -49,9 +47,9 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                                         }`}>
                                         {conversation.otherPartyName}
                                     </h3>
-                                    {lastMessage && (
+                                    {conversation.lastMessageAt && (
                                         <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                                            {format(new Date(lastMessage.timestamp), 'MMM dd')}
+                                            {format(new Date(conversation.lastMessageAt), 'MMM dd')}
                                         </span>
                                     )}
                                 </div>
@@ -60,11 +58,11 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                                     {conversation.listingTitle}
                                 </p>
 
-                                {lastMessage && (
+                                {conversation.lastMessage && (
                                     <div className="flex items-center justify-between">
                                         <p className={`text-sm truncate ${hasUnread ? 'font-medium text-gray-900' : 'text-gray-500'
                                             }`}>
-                                            {lastMessage.content}
+                                            {conversation.lastMessage}
                                         </p>
                                         {hasUnread && (
                                             <span className="ml-2 flex-shrink-0 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">

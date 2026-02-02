@@ -46,9 +46,17 @@ export const login = (email: string, password: string): { success: boolean; erro
     }
 
     // Verify password (decode base64 and compare)
-    const decodedPassword = atob(user.password);
-    if (decodedPassword !== password) {
-        return { success: false, error: 'Invalid email or password' };
+    try {
+        const decodedPassword = atob(user.password);
+        if (decodedPassword !== password) {
+            return { success: false, error: 'Invalid email or password' };
+        }
+    } catch (error) {
+        // If password is not properly base64 encoded, try direct comparison
+        // This handles legacy data or corrupted passwords
+        if (user.password !== password) {
+            return { success: false, error: 'Invalid email or password' };
+        }
     }
 
     // Set current user session

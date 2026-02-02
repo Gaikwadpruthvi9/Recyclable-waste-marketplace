@@ -160,3 +160,12 @@ export const initializeStorage = (): void => {
         addUser(adminUser);
     }
 };
+
+// Clear all storage and reinitialize (useful for fixing corrupted data)
+export const clearStorage = (): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem(STORAGE_KEYS.USERS);
+    localStorage.removeItem(STORAGE_KEYS.LISTINGS);
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
+    initializeStorage();
+};

@@ -211,9 +211,8 @@ export default function ServiceDetailPage() {
             status: RequestStatus.REQUESTED,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            details: formData,
             // Snapshot stats if reporting
-            data: service.category === ServiceCategory.REPORTING ? reportStats : undefined,
+            data: service.category === ServiceCategory.REPORTING ? reportStats : formData,
             companyName: user?.company || '',
             contactName: user?.name || '',
             contactEmail: user?.email || '',
